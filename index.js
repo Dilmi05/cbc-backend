@@ -5,11 +5,6 @@ import bodyParser from 'body-parser';
 
 import mongoose from 'mongoose'; // Import Mongoose
 
-import student from './models/student.js'; // Import the student model
-  // Import Express
-
-import studentRouter from './routes/studentroutes.js'; // Import the student routes
-
 import productRouter from './routes/productroutes.js'; // Import the product routes
  const app = express();  
 
@@ -54,8 +49,7 @@ connection.once("open",() => {
 
 const PORT = 5000;
 
- app.use('/api/students', studentRouter); // Use the student router for /students routes
- app.use('/api/products', productRouter);
+  app.use('/api/products', productRouter);
   // Use the product router for /products routes
 
  app.use('/api/users', userRouter); // Use the user router for /users routes
