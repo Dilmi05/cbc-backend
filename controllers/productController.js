@@ -74,7 +74,7 @@ export function getproductbyname(req,res){
         }
     }).catch(() => {
         res.json({
-            message: 'product not found',
+            message: 'Error fetching product',
          });
     })
 } 
