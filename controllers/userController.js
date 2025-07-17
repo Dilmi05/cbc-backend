@@ -60,3 +60,12 @@ export function createUser(req, res) {
     }  
 
 
+    export function deleteuser(req,res){
+        user.deleteOne({email:req.body.email}).then(() => {
+            res.json({
+                message: 'User deleted successfully',
+            });
+        })
+    }
+
+
