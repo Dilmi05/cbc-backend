@@ -10,8 +10,11 @@ import productRouter from './routes/productroutes.js'; // Import the product rou
 
 import userRouter from './routes/userRouter.js'; // Import the user routes
 
+import dotenv from "dotenv"; // Import dotenv for environment variables
+dotenv.config() // Load environment variables from .env file
+
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
-const mongodbUrl= "mongodb+srv://amandhadilmi:123@cluster0.fdmqznf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"// Create Express app
+const mongodbUrl= process.env.MONGO_DB_URI// Create Express app
 
 
 
