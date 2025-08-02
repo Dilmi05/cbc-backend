@@ -1,18 +1,20 @@
 import product from "../models/product.js";    
 
-export function getProduct(req, res) {
+export async function getProduct(req, res) {
     // Fetch the list of products from the database
-    product.find().then(
-        (productList) => {
-            res.json({
-                list: productList,
-            });
-        }
-    ).catch((error) => {
+    try{
+     const productList = await product.find()
+
+     res.json({
+        list: productList, // Return the list of products
+    });
+
+    } catch (error) {
         res.json({
             message: 'Error fetching products',
-         });
-    })
+        });
+
+    }
 }
 
 export function createProduct(req, res) {
