@@ -29,7 +29,7 @@ app.use((req,res,next) => {
    
 
   if(token!= null){
-    jwt.verify(token,"ama610156",(err,decoded)=>{
+    jwt.verify(token,process.env.SECRET,(err,decoded)=>{
       if(!err){
 
         console.log(decoded); // Log the decoded token

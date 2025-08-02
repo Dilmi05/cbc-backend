@@ -3,6 +3,9 @@ import user from '../models/user.js'; // Import the user model
 import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
 
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
+
+import dotenv from 'dotenv'; // Import dotenv for environment variables
+dotenv.config(); // Load environment variables from .env file
 export function createUser(req, res) {
 
     const newuserdata = req.body; // Get user data from the request body
@@ -42,7 +45,7 @@ export function createUser(req, res) {
                     type: user.type,
                     profile: user.profile,
 
-                  },"ama610156")
+                  },process.env.SECRET)
                     res.json({
                         message: "Login successful",
                         token: token, // Respond with the generated token
