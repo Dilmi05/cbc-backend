@@ -1,4 +1,6 @@
-import product from "../models/product.js";    
+import product from "../models/product.js";  
+
+import{ isAdmin } from "./userController.js"; // Import the isAdmin function
 
 export function createProduct(req, res) {
 

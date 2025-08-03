@@ -4,10 +4,7 @@ import express from 'express'; // Import Express
 import bodyParser from 'body-parser';  
 
 import mongoose from 'mongoose'; // Import Mongoose
-
-  const app = express();  
-
-
+ const app = express();  
 
 import userRouter from './routes/userRouter.js'; // Import the user routes
 
@@ -18,6 +15,7 @@ import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
 const mongodbUrl= process.env.MONGO_DB_URI// Create Express app
 
 
+import productRouter from './routes/productRouter.js'; // Import the product routes
 
 
 app.use(bodyParser.json()); // Middleware to parse JSON bodies
@@ -56,6 +54,8 @@ const PORT = 5000;
  
  app.use('/api/users', userRouter); // Use the user router for /users routes
 // Start the server
+
+app.use('/api/products', productRouter); // Use the product router for /products routes
 app.listen(PORT, () => {
   console.log("Server is running at http://localhost:${PORT}");
 });
