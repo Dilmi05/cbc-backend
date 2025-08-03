@@ -10,6 +10,27 @@ export function createUser(req, res) {
 
     const newuserdata = req.body; // Get user data from the request body
 
+    if(newuserdata.type=="admin"){
+
+        if(req.user == null){
+            res.json({
+                message:"Please loging as administrator to create an admin account"
+            })
+            return;
+
+
+        }
+
+        if(req.user.type != "admin"){
+            res.json({
+                message:"Please login as administrator to create an admin account"
+            })
+            return;
+
+        }
+
+    }
+
     newuserdata.password = bcrypt.hashSync(newuserdata.password, 10); // Hash the password
 
     const newUser = new user(newuserdata); // Create a new user instance with the request body
@@ -74,3 +95,5 @@ export function createUser(req, res) {
 
 
 
+//  "password": "hashedpassword123", 
+//  "email": "exampleuser@gmail.com",

@@ -5,8 +5,9 @@ import bodyParser from 'body-parser';
 
 import mongoose from 'mongoose'; // Import Mongoose
 
-import productRouter from './routes/productroutes.js'; // Import the product routes
- const app = express();  
+  const app = express();  
+
+
 
 import userRouter from './routes/userRouter.js'; // Import the user routes
 
@@ -52,9 +53,7 @@ connection.once("open",() => {
 
 const PORT = 5000;
 
-  app.use('/api/products', productRouter);
-  // Use the product router for /products routes
-
+ 
  app.use('/api/users', userRouter); // Use the user router for /users routes
 // Start the server
 app.listen(PORT, () => {
