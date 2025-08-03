@@ -93,7 +93,31 @@ export function createUser(req, res) {
     }
 
 
+    export function isAdmin(req){
+
+        if(req.user == null){
+            return false; // If no user is logged in, return false
+        }
+ 
+        if(req.user.type!="customer"){
+            return false; // If the user type is not 'customer', return true (indicating admin)
+        }
+
+        return true; // If the user type is 'customer', return true (indicating admin)
+    }
 
 
-//  "password": "hashedpassword123", 
+
+
+//  "password": "hashedpassword123", admin
 //  "email": "exampleuser@gmail.com",
+
+
+//  "email": "exampleuser5@gmail.com",customer
+//  "password": "hashedpassword123", 
+
+
+/*"email": "johnsmith2025@example.com",
+  "firstname": "John",
+  "lastname": "Smith",
+  "password": "StrongPass!789",*/
