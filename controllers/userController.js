@@ -1,108 +1,82 @@
-import user from '../models/user.js'; // Import the user model
+import User from '../models/user.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
+dotenv.config();
 
-import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
-
-import dotenv from 'dotenv'; // Import dotenv for environment variables
-dotenv.config(); // Load environment variables from .env file
+// Create a new user
 export function createUser(req, res) {
-
-    const newuserdata = req.body; // Get user data from the request body
-
-    if(newuserdata.type=="admin"){
-
-        if(req.user == null){
-            res.json({
-                message:"Please loging as administrator to create an admin account"
-            })
-            return;
-
-
-        }
-
-        if(req.user.type != "admin"){
-            res.json({
-                message:"Please login as administrator to create an admin account"
-            })
-            return;
-
-        }
-
-    }
-
-    newuserdata.password = bcrypt.hashSync(newuserdata.password, 10); // Hash the password
-
-    const newUser = new user(newuserdata); // Create a new user instance with the request body
-    newUser.save() // Save the new user to the database
-        .then(() => {
-            res.json({ message: 'User created successfully' }); // Respond with success message
-        })
-        .catch((err) => {
-            res.json({ 
-                
-                message:"Error creating user",
-            }); // Handle errors
-        });
-
-    }
-
-    export function loginuser(req,res){
-        user.find({email:req.body.email}).then((userList) => {
-
-            if(userList.length==0){
-                res.json({
-                    message: 'User not found',
-                });
-            }else{
-                const user = userList[0]; // Get the first user from the list
-                const isPasswordValid = bcrypt.compareSync(req.body.password, user.password); // Compare the provided password with the stored hashed password
-
-                if(isPasswordValid){
-                  const token =   jwt.sign({email: user.email,
-                    fillname: user.firstname,
-                    lastname: user.lastname,
-                    isblocked: user.isblocked,
-                    type: user.type,
-                    profile: user.profile,
-
-                  },process.env.SECRET)
-                    res.json({
-                        message: "Login successful",
-                        token: token, // Respond with the generated token
-                    });
-                }else{
-                    res.json({
-                        message:"Invalid password",
-                    })
-                }
-
-
-            }
-
-        })
-    }  
-
-
-    export function deleteuser(req,res){
-        user.deleteOne({email:req.body.email}).then(() => {
-            res.json({
-                message: 'User deleted successfully',
+    const data = req.body;
+    console.log("check");
+    
+    // Only admin can create another admin
+    if (data.type === "admin") {
+        if (!req.user || req.user.type !== "admin") {
+            return res.json({
+                message: "Please login as administrator to create an admin account"
             });
-        })
+        }
     }
 
+    // Hash the password
+    data.password = bcrypt.hashSync(data.password, 10);
 
-    export function isAdmin(req){
-    if(req.user == null){
-        return false;
-    }
-    if(req.user.type != "customer"){
-        return false;
-    }
-    return true;
+    const newUser = new User(data);
+    newUser.save()
+        .then(() => res.json({ message: 'User created successfully' }))
+        .catch((err) => res.json({ message: "Error creating user", error: err.message }));
 }
 
+// Login user and return token
+export function loginuser(req, res) {
+    const { email, password } = req.body;
 
+    User.findOne({ email })
+        .then((user) => {
+            if (!user) {
+                return res.json({ message: 'User not found' });
+            }
 
- 
+            const isValid = bcrypt.compareSync(password, user.password);
+            if (!isValid) {
+                return res.json({ message: "Invalid password" });
+            }
+
+            const token = jwt.sign({
+                email: user.email,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                isblocked: user.isblocked,
+                type: user.type,
+                profile: user.profile,
+            }, process.env.SECRET, { expiresIn: '1h' });
+
+            res.json({ message: "Login successful", token });
+        })
+        .catch((err) => res.json({ message: "Login failed", error: err.message }));
+}
+
+// Delete user by email
+export function deleteuser(req, res) {
+    User.deleteOne({ email: req.body.email })
+        .then(() => res.json({ message: 'User deleted successfully' }))
+        .catch((err) => res.json({ message: 'Error deleting user', error: err.message }));
+}
+
+// Check if user is admin
+export function isAdmin(req) {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+
+        if (!token) return false;
+
+        const decoded = jwt.verify(token, process.env.SECRET); // Verify token using secret
+        
+        return decoded.type === "admin";
+        
+    } catch (err) {
+        return false;
+    }
+}
