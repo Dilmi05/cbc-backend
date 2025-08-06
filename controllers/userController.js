@@ -8,8 +8,7 @@ dotenv.config();
 // Create a new user
 export function createUser(req, res) {
     const data = req.body;
-    console.log("check");
-    
+     
     // Only admin can create another admin
     if (data.type === "admin") {
         if (!req.user || req.user.type !== "admin") {
