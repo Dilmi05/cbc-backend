@@ -99,3 +99,16 @@ export function isCustomer(req) {
     }
 }
 
+/*export function isCustomer(req) {
+    if(req.user == null) {
+        return false; // No user is logged in
+    }
+
+    if(req.user.type != "customer") {
+        return false; // User is a customer
+    }
+ 
+    return true; // User is a customer
+}*/
+
+

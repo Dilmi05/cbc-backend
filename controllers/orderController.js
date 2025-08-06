@@ -1,4 +1,5 @@
 import order from "../models/order.js";
+import product from "../models/product.js";
 
 import{isCustomer} from "./userController.js"; // Importing isCustomer function for customer check
 
@@ -31,7 +32,41 @@ export  async function createOrder(req, res) {
 
     }
 
+    
+
     const newOrderData =req.body;
+
+    const newProductArray=[];
+
+    for(let i=0; i<newOrderData.orderedItems.length;i++){
+        const Product = await order.findOne({
+            productId: newOrderData.orderedItems[i].productId
+        })
+
+        if(Product== null) {
+            return res.json({
+                message: "Product with ID "+newOrderData.orderedItems[i].productId+"not found"
+            });
+        }
+
+         newProductArray[i] ={
+            name:product.productName,
+            price:product.price,
+            quantity:newOrderData.orderedItems[i].quantity,
+            image:product.image[0]
+        }
+
+       
+    }
+
+    console.log(newProductArray);
+
+    newOrderData.orderedItems = newProductArray;
+
+
+     
+
+
     newOrderData.orderId = orderId;
     newOrderData.email = req.user.email;
     
