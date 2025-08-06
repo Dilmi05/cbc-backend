@@ -12,7 +12,7 @@ const orderSchema = mongoose.Schema({
         required: true
     },
 
-    orderItems:[
+    orderedItems:[
         {
             name:{
                 type: String,
@@ -40,13 +40,18 @@ const orderSchema = mongoose.Schema({
 
     paymentId: {
         type: String,
-     },
+      },
  
      status: {
         type: String,
         default: 'preparing'
 
         },
+
+    notes:{
+        type: String,
+        
+    },
 
         name: {
             type: String,
@@ -68,4 +73,4 @@ const orderSchema = mongoose.Schema({
 })
 
 const Order = mongoose.model("orders", orderSchema);
-
+export default Order; // Export the order model

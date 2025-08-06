@@ -1,12 +1,18 @@
 // index.js
 import express from 'express'; // Import Express
 
-import bodyParser from 'body-parser';  
+import bodyParser from 'body-parser'; 
+
+
+
 
 import mongoose from 'mongoose'; // Import Mongoose
  const app = express();  
 
 import userRouter from './routes/userRouter.js'; // Import the user routes
+
+
+import orderRouter from './routes/orderRouter.js'; // Import the order routes
 
 import dotenv from "dotenv"; // Import dotenv for environment variables
 dotenv.config() // Load environment variables from .env file
@@ -56,6 +62,9 @@ const PORT = 5000;
 // Start the server
 
 app.use('/api/products', productRouter); // Use the product router for /products routes
+
+app.use('/api/orders', orderRouter); // Use the order router for /orders 
+
 app.listen(PORT, () => {
   console.log("Server is running at http://localhost:${PORT}");
 });

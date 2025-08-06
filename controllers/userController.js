@@ -79,3 +79,23 @@ export function isAdmin(req) {
         return false;
     }
 }
+
+// In userController.js
+ 
+ 
+// Check if user is customer
+export function isCustomer(req) {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1]; // Get token from Bearer <token>
+
+        if (!token) return false;
+
+        const decoded = jwt.verify(token, process.env.SECRET); // Verify token using secret
+
+        return decoded.type === "user"; // 'user' means customer in your app
+    } catch (err) {
+        return false;
+    }
+}
+
