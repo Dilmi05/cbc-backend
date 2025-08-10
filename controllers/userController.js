@@ -51,7 +51,17 @@ export function loginuser(req, res) {
                 profile: user.profile,
             }, process.env.SECRET, { expiresIn: '1h' });
 
-            res.json({ message: "Login successful", token });
+            res.json({ message: "Login successful",
+                token: token,
+                user: {
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    type: user.type,
+                    profile: user.profile,
+                    email: user.email
+                }
+
+            });
         })
         .catch((err) => res.json({ message: "Login failed", error: err.message }));
 }

@@ -10,7 +10,7 @@ dotenv.config() // Load environment variables from .env file
 import jwt from 'jsonwebtoken'; // Import jsonwebtoken for token generation
 const mongodbUrl = process.env.MONGO_DB_URI// Create Express app
 import productRouter from './routes/productRouter.js'; // Import the product routes
-import cors from
+import cors from 'cors'; // Import CORS for cross-origin requests
 
 
 app.use(bodyParser.json()); // Middleware to parse JSON bodies
