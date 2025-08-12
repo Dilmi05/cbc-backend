@@ -9,4 +9,4 @@ userRouter.post('/', createUser); // Define the POST route for creating a user
 
 userRouter.post('/login',loginuser); // Define the POST route for user login
 
-export default userRouter; // Export the user router
+export default userRouter; // Export the user routern

@@ -14,7 +14,7 @@ export function createProduct(req, res) {
     const newProduct = new Product(data);
     newProduct.save()
         .then(() => res.json({ message: 'Product created successfully' }))
-        .catch((err) => res.json({
+        .catch((err) => res.status(403).json({
             message: "Error creating product",
             error: err.message
         }));
