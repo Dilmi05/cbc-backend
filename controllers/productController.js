@@ -1,3 +1,4 @@
+import product from '../models/product.js';
 import Product from '../models/product.js';
 import { isAdmin } from './userController.js'; // Importing isAdmin function for admin check
 
@@ -28,4 +29,27 @@ export function getProducts(req, res) {
             message: "Error fetching products",
             error: err.message
         }));
+}
+ 
+
+export function deleteProduct(req, res) {
+    if (!isAdmin(req)) {
+        return res.status(403).json({
+            message: "Please login as admin account to delete product"
+        });
+    }
+
+    const productId = req.params.productId;
+
+    Product.deleteOne({ productId: productId })
+        .then(() => {
+            res.json({
+                message: "Product deleted"
+            });
+        })
+        .catch((error) => {
+            res.status(403).json({
+                message: error.message
+            });
+        });
 }
