@@ -38,8 +38,7 @@ export function deleteProduct(req, res) {
             message: "Please login as admin account to delete product"
         });
     }
-
-    const productId = req.params.productId;
+     const productId = req.params.productId;
 
     Product.deleteOne({ productId: productId })
         .then(() => {
@@ -55,6 +54,7 @@ export function deleteProduct(req, res) {
 }
 
 
+
 export function updateProduct(req, res) {
   if (!isAdmin(req)) {
     res.status(403).json({
@@ -63,24 +63,28 @@ export function updateProduct(req, res) {
     return;
   }
 
-  const productId = req.params.productId;
+  const productId = req.params.productId; // This is the param from URL
   const newProductData = req.body;
 
   Product.updateOne(
-    { productId: productId },
+    { productID: productId }, // Make sure this matches your schema's field name exactly
     newProductData
   )
-    .then(() => {
+    .then((result) => {
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ message: "Product not found" });
+      }
       res.json({
         message: "Product updated",
       });
     })
     .catch((error) => {
-      res.status(403).json({
-        message: error,
+      res.status(500).json({
+        message: error.message || "Failed to update product",
       });
     });
 }
+
 
 export async function getProductById(req,res){
 
